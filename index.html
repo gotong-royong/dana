@@ -33,21 +33,25 @@
 <script>
 function daftar() {
 
-    let nama = document.getElementById("nama").value;
-    let hp = document.getElementById("hp").value;
-    let sponsor = document.getElementById("sponsor").value;
+    const nama = document.getElementById("nama").value.trim();
+    const hp = document.getElementById("hp").value.trim();
+    const sponsor = document.getElementById("sponsor").value.trim();
 
-    // URL WEB APP ANDA — SUDAH SAYA MASUKKAN
+    if (!nama || !hp || !sponsor) {
+        alert("Semua data wajib diisi!");
+        return;
+    }
+
     const url = "https://script.google.com/macros/s/AKfycbzWAR_BD8bFGDPmnpWy6JSbMve-DyXF4uW4Wo9IQLN_LDj1Ctw4JkpswP2WYm8pvJlC5w/exec";
 
     document.getElementById("result").style.display = "block";
     document.getElementById("result").innerHTML = "Memproses...";
 
-    fetch(url + "?nama=" + encodeURIComponent(nama)
-                + "&hp=" + encodeURIComponent(hp)
-                + "&sponsor=" + encodeURIComponent(sponsor),
-                { method: "GET" })
-    .then(r => r.json())
+    fetch(`${url}?nama=${encodeURIComponent(nama)}&hp=${encodeURIComponent(hp)}&sponsor=${encodeURIComponent(sponsor)}`, {
+        method: "GET",
+        mode: "cors"
+    })
+    .then(response => response.json())
     .then(data => {
 
         document.getElementById("result").innerHTML = `
@@ -58,12 +62,11 @@ function daftar() {
             <p>Level 4: ${data.level4} (Rp 1.000)</p>
         `;
     })
-    .catch(err => {
-        document.getElementById("result").innerHTML = "Fetch Error: " + err;
+    .catch(error => {
+        document.getElementById("result").innerHTML = "Fetch Error: " + error;
     });
 }
 </script>
 
 </body>
 </html>
-
